@@ -2,7 +2,9 @@ package com.nxtlife.efkon.msil.issueManagement.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 
@@ -25,6 +27,7 @@ import com.nxtlife.efkon.msil.issueManagement.utility.CustomException;
 import com.nxtlife.efkon.msil.issueManagement.utility.IssueType;
 import com.nxtlife.efkon.msil.issueManagement.dto.HttpResponseDto;
 import com.nxtlife.efkon.msil.issueManagement.dto.MailRequest;
+import com.nxtlife.efkon.msil.issueManagement.dto.MailResponse;
 
 @RestController
 @RequestMapping("/incidents")
@@ -126,15 +129,17 @@ public class IncidentController {
 						+ currentIncident.getIssueType() + "<br> <b>Transporter Name : </b>"
 						+ currentIncident.getTransporterName() + "<br><b> Transporter ID :</b>"
 						+ currentIncident.getTransporterID() + "<br> <b>Remarks : </b>" + currentIncident.getRemarks(),
-				"Complaint lodged by  " + currentIncident.getUsername(), "C:\\Users\\laxmi\\Desktop\\logo.png");
+				"Complaint lodged by  " + currentIncident.getUsername(), "C:\\Users\\laxmi\\Desktop\\efkonLogo.png");
 		try {
 			notificationController.sendEmail(mailRequest);
 		} catch (MessagingException | IOException e) {
 
 			e.printStackTrace();
 		}
-
-		return new ResponseEntity<Incident>(currentIncident, HttpStatus.OK);
+     Map<String , Object> response = new HashMap<>();
+     response.put("Incident",currentIncident);
+     response.put("MailResponse", new MailResponse("Email sent successfully !! ",true));
+		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 
 	}
 
