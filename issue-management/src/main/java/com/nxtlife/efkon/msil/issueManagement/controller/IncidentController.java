@@ -1,7 +1,7 @@
 package com.nxtlife.efkon.msil.issueManagement.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +11,7 @@ import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ import com.nxtlife.efkon.msil.issueManagement.dto.HttpResponseDto;
 import com.nxtlife.efkon.msil.issueManagement.dto.MailRequest;
 import com.nxtlife.efkon.msil.issueManagement.dto.MailResponse;
 
+@CrossOrigin(origins= {"*"})
 @RestController
 @RequestMapping("/incidents")
 public class IncidentController {
@@ -40,15 +42,8 @@ public class IncidentController {
 
 	@GetMapping(value = "/issueType")
 	public ResponseEntity<?> getIssueType() {
-		IssueType[] issues = IssueType.values();
-
-		List<String> issueList = new ArrayList<>();
-		int i = 0;
-		while (i < issues.length) {
-			issueList.add(issues[i].toString());
-			i++;
-		}
-		return new ResponseEntity<List<String>>(issueList, HttpStatus.OK);
+		
+		return new ResponseEntity<List<String>>(IssueType.getIssueTypes(), HttpStatus.OK);
 	}
 
 	@GetMapping
@@ -81,7 +76,7 @@ public class IncidentController {
 
 	@GetMapping(value = "transporter/{transporterID}")
 
-	public ResponseEntity<?> getIncidentsByTransporterID(@PathVariable Integer transporterID) {
+	public ResponseEntity<?> getIncidentsByTransporterID(@PathVariable String transporterID) {
 		List<Incident> incident;
 		try {
 			incident = incidentServiceImpl.getAllIncidentsByTransporterID(transporterID);
@@ -113,7 +108,7 @@ public class IncidentController {
 		return new ResponseEntity<Incident>(currentIncident, HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/")
+	@PostMapping
 	public ResponseEntity<?> saveIncident(@RequestBody Incident incident) {
 
 		Incident currentIncident;
@@ -128,8 +123,8 @@ public class IncidentController {
 				"<b> Incident ID :</b>" + currentIncident.getIncidentID() + "<br> <b>Issue Type: </b>"
 						+ currentIncident.getIssueType() + "<br> <b>Transporter Name : </b>"
 						+ currentIncident.getTransporterName() + "<br><b> Transporter ID :</b>"
-						+ currentIncident.getTransporterID() + "<br> <b>Remarks : </b>" + currentIncident.getRemarks(),
-				"Complaint lodged by  " + currentIncident.getUsername(), "C:\\Users\\laxmi\\Desktop\\efkonLogo.png");
+						+ currentIncident.getTransporterID() + "<br> <b>Remarks : </b>" + currentIncident.getRemarks()+"<br> <b>Report Time : </b>"+ currentIncident.getReportDateTime(),
+				"Complaint lodged by  " + currentIncident.getUsername(), "C:\\Users\\laxmi\\Desktop\\efkonLogo.jpg");
 		try {
 			notificationController.sendEmail(mailRequest);
 		} catch (MessagingException | IOException e) {
@@ -144,7 +139,7 @@ public class IncidentController {
 	}
 
 	@DeleteMapping(value = "/{incidentID}")
-	public ResponseEntity<?> deleteIncidentByID(Long incidentID) {
+	public ResponseEntity<?> deleteIncidentByID(@PathVariable Long incidentID) {
 
 		try {
 			incidentServiceImpl.deleteIncidentByID(incidentID);
@@ -156,10 +151,10 @@ public class IncidentController {
 					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<HttpResponseDto>(new HttpResponseDto("Deleted Successfully..", HttpStatus.NO_CONTENT),
-				HttpStatus.NO_CONTENT);
+				HttpStatus.OK);
 	}
 
-	@DeleteMapping(value = "")
+	@DeleteMapping
 	public ResponseEntity<?> deleteAllIncidents() {
 		incidentServiceImpl.deleteAllIncidents();
 		return new ResponseEntity<HttpResponseDto>(new HttpResponseDto("Deleted Successfully..", HttpStatus.NO_CONTENT),
