@@ -11,7 +11,7 @@ public interface IncidentService {
 
 	public Incident getIncidentByID(Long incidentID) throws CustomException, IllegalArgumentException;
 
-	public List<Incident> getAllIncidentsByTransporterID(Integer transporterID)
+	public List<Incident> getAllIncidentsByTransporterID(String transporterID)
 			throws CustomException, IllegalArgumentException;
 
 	public Incident saveIncident(Incident incident) throws IllegalArgumentException;
