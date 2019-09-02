@@ -7,11 +7,13 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.1.7.RELEASE</version>
+		
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.nxtlife.efkon.msil</groupId>
 	<artifactId>com.nxtlife.efkon.msil.issueManagement</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	
 	<name>issue-management</name>
 	<description>system to record and fetch isssues</description>
 
@@ -63,8 +65,10 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				
 			</plugin>
 		</plugins>
+		<finalName>issue-management-api </finalName>
 	</build>
 
 </project>
