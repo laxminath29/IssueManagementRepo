@@ -1,5 +1,8 @@
 package com.nxtlife.efkon.msil.issueManagement.entity;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,7 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
@@ -23,7 +28,7 @@ public class Incident {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long incidentID;
 
-	@NotNull
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "ISSUE_TYPE")
 	private IssueType issueType;
@@ -34,7 +39,7 @@ public class Incident {
 	private String username;
 
 	@NotNull
-	private Integer transporterID;
+	private String transporterID;
 
 	@Email
 	private String email;
@@ -49,6 +54,34 @@ public class Incident {
 	private String vehicleNumber;
 
 	private Boolean isClosed;
+	
+	private Timestamp reportDateTime;
+	
+	@NotNull
+	@Transient
+	private String issueTypeStr;
+	
+	
+
+	public String getIssueTypeStr() {
+		return issueTypeStr;
+	}
+
+	public void setIssueTypeStr(String issueTypeStr) {
+		this.issueTypeStr = issueTypeStr;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public Timestamp getReportDateTime() {
+		return reportDateTime;
+	}
+
+	public void setReportDateTime(Timestamp timestamp) {
+		this.reportDateTime = timestamp;
+	}
 
 	public Long getIncidentID() {
 		return incidentID;
@@ -78,11 +111,11 @@ public class Incident {
 		this.username = username;
 	}
 
-	public Integer getTransporterID() {
+	public String getTransporterID() {
 		return transporterID;
 	}
 
-	public void setTransporterID(Integer transporterID) {
+	public void setTransporterID(String transporterID) {
 		this.transporterID = transporterID;
 	}
 
@@ -144,11 +177,11 @@ public class Incident {
 		super();
 	}
 
-	public Incident(@NotNull IssueType issueType, @NotNull String transporterName, @Email String email,
+	public Incident(@NotNull String issueTypeStr, @NotNull String transporterName, @Email String email,
 			String contactNumber, @NotNull String remarks, String location, String vehicleNumber, Boolean isClosed,
-			@NotNull Integer transporterID, String username) {
+			@NotNull String transporterID, String username) {
 		super();
-		this.issueType = issueType;
+		this.issueTypeStr = issueTypeStr;
 		this.transporterName = transporterName;
 		this.email = email;
 		this.contactNumber = contactNumber;
@@ -160,10 +193,10 @@ public class Incident {
 		this.username = username;
 	}
 
-	public Incident(@NotNull IssueType issueType, @NotNull String transporterName, @NotNull String remarks,
-			Boolean isClosed, @NotNull Integer transporterID, String username) {
+	public Incident(@NotNull String issueTypeStr, @NotNull String transporterName, @NotNull String remarks,
+			Boolean isClosed, @NotNull String transporterID, String username) {
 		super();
-		this.issueType = issueType;
+		this.issueTypeStr = issueTypeStr;
 		this.transporterName = transporterName;
 		this.remarks = remarks;
 		this.isClosed = isClosed;
@@ -171,10 +204,10 @@ public class Incident {
 		this.username = username;
 	}
 
-	public Incident(@NotNull IssueType issueType, @NotNull String transporterName, @NotNull String remarks,
-			@NotNull Integer transporterID) {
+	public Incident(@NotNull  String issueTypeStr, @NotNull String transporterName, @NotNull String remarks,
+			@NotNull String transporterID) {
 		super();
-		this.issueType = issueType;
+		this.issueTypeStr = issueTypeStr;
 		this.transporterName = transporterName;
 		this.remarks = remarks;
 		this.transporterID = transporterID;
