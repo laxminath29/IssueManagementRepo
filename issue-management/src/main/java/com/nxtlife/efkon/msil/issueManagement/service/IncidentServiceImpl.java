@@ -1,6 +1,7 @@
 package com.nxtlife.efkon.msil.issueManagement.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.nxtlife.efkon.msil.issueManagement.entity.Incident;
 import com.nxtlife.efkon.msil.issueManagement.repository.IncidentRepository;
 import com.nxtlife.efkon.msil.issueManagement.utility.CustomException;
+import com.nxtlife.efkon.msil.issueManagement.utility.IssueType;
 
 @Service
 public class IncidentServiceImpl implements IncidentService {
@@ -21,6 +23,10 @@ public class IncidentServiceImpl implements IncidentService {
 		List<Incident> incidentList = new ArrayList<>();
 
 		incidentRepository.findAll().forEach(incidentList::add);
+		for(Incident incident : incidentList) {
+			incident.setIssueTypeStr(IssueType.revMapping.get(incident.getIssueType()));
+		}
+		
 		return incidentList;
 
 	}
@@ -31,10 +37,12 @@ public class IncidentServiceImpl implements IncidentService {
 			throw new IllegalArgumentException("Incident Id can not be Empty/null ..");
 		}
 		Incident incident = incidentRepository.findById(incidentID).orElse(null);
+		
 
 		if (incident == null) {
 			throw new CustomException("Incident having ID : " + incidentID + " does not exist..");
 		}
+		incident.setIssueTypeStr(IssueType.revMapping.get(incident.getIssueType()));
 		return incident;
 	}
 
@@ -43,7 +51,9 @@ public class IncidentServiceImpl implements IncidentService {
 		if (incident == null) {
 			throw new IllegalArgumentException("Incident record passed can not be empty/null .");
 		}
-
+        incident.setReportDateTime( new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
+        incident.setIssueType(IssueType.mapping.get(incident.getIssueTypeStr().toString()));
+       
 		return incidentRepository.save(incident);
 	}
 
@@ -64,12 +74,15 @@ public class IncidentServiceImpl implements IncidentService {
 		currentIncident.setContactNumber(incident.getContactNumber());
 		currentIncident.setEmail(incident.getEmail());
 		currentIncident.setIsClosed(incident.getIsClosed());
-		currentIncident.setIssueType(incident.getIssueType());
+		currentIncident.setIssueType(IssueType.mapping.get(incident.getIssueTypeStr().toString()));
 		currentIncident.setLocation(incident.getLocation());
 		currentIncident.setRemarks(incident.getRemarks());
 		currentIncident.setTransporterName(incident.getTransporterName());
 		currentIncident.setVehicleNumber(incident.getVehicleNumber());
 		currentIncident.setUserName(incident.getUsername());
+		currentIncident.setTransporterID(incident.getTransporterID());
+		currentIncident.setReportDateTime( new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
+		
 
 		return incidentRepository.save(currentIncident);
 
@@ -96,18 +109,21 @@ public class IncidentServiceImpl implements IncidentService {
 	}
 
 	@Override
-	public List<Incident> getAllIncidentsByTransporterID(Integer transporterID)
+	public List<Incident> getAllIncidentsByTransporterID(String transporterID)
 			throws CustomException, IllegalArgumentException {
 		if (transporterID == null) {
 			throw new IllegalArgumentException("Transporter Id can not be Empty/null ..");
 		}
-		List<Incident> incident = incidentRepository.findAllByTransporterID(transporterID);
+		List<Incident> incidentList = incidentRepository.findAllByTransporterID(transporterID);
 
-		if (incident.isEmpty()) {
+		if (incidentList.isEmpty()) {
 			throw new CustomException("Incidents for Transporter having ID : " + transporterID + " does not exist..");
 		}
+		for(Incident incident : incidentList) {
+			incident.setIssueTypeStr(IssueType.revMapping.get(incident.getIssueType()));
+		}
 
-		return incident;
+		return incidentList;
 	}
 
 }
