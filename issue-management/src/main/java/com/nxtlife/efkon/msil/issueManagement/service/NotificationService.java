@@ -18,6 +18,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.nxtlife.efkon.msil.issueManagement.dto.MailRequest;
@@ -25,7 +26,8 @@ import com.nxtlife.efkon.msil.issueManagement.utility.EmailConstants;
 
 @Service
 public class NotificationService {
-
+  
+	@Async
 	public void sendEmail(MailRequest request) throws AddressException, MessagingException, IOException {
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
