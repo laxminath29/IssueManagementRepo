@@ -8,5 +8,5 @@ import com.nxtlife.efkon.msil.issueManagement.entity.Incident;
 
 public interface IncidentRepository extends JpaRepository<Incident, Long> {
 
-	public List<Incident> findAllByTransporterID(Integer transporterID);
+	public List<Incident> findAllByTransporterID(String transporterID);
 }
