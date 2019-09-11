@@ -1,14 +1,19 @@
 package com.nxtlife.efkon.msil.issueManagement.controller;
 
+import java.io.File;
 import java.io.IOException;
-
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,7 +35,7 @@ import com.nxtlife.efkon.msil.issueManagement.dto.HttpResponseDto;
 import com.nxtlife.efkon.msil.issueManagement.dto.MailRequest;
 import com.nxtlife.efkon.msil.issueManagement.dto.MailResponse;
 
-@CrossOrigin(origins= {"*"})
+@CrossOrigin(origins = { "*" })
 @RestController
 @RequestMapping("/incidents")
 public class IncidentController {
@@ -39,10 +44,16 @@ public class IncidentController {
 	private IncidentServiceImpl incidentServiceImpl;
 	@Autowired
 	private NotificationController notificationController;
+	/*
+	 * @Autowired ResourceLoader resourceLoader;
+	 * 
+	 * Resource resource = resourceLoader.getResource("classpath:efkonLogo.png");
+	 * 
+	 */
 
 	@GetMapping(value = "/issueType")
 	public ResponseEntity<?> getIssueType() {
-		
+
 		return new ResponseEntity<List<String>>(IssueType.getIssueTypes(), HttpStatus.OK);
 	}
 
@@ -123,18 +134,22 @@ public class IncidentController {
 				"<b> Incident ID :</b>" + currentIncident.getIncidentID() + "<br> <b>Issue Type: </b>"
 						+ currentIncident.getIssueType() + "<br> <b>Transporter Name : </b>"
 						+ currentIncident.getTransporterName() + "<br><b> Transporter ID :</b>"
-						+ currentIncident.getTransporterID() + "<br> <b>Remarks : </b>" + currentIncident.getRemarks()+"<br> <b>Report Time : </b>"+ currentIncident.getReportDateTime(),
-				"Complaint lodged by  " + currentIncident.getUsername(), "C:\\Users\\laxmi\\Desktop\\efkonLogo.jpg");
+						+ currentIncident.getTransporterID() + "<br> <b>Remarks : </b>" + currentIncident.getRemarks()
+						+ "<br> <b>Report Time : </b>" + currentIncident.getReportDateTime(),
+				"Complaint lodged by  " + currentIncident.getUsername());
 		try {
 			notificationController.sendEmail(mailRequest);
-		} catch (MessagingException | IOException e) {
+		} catch ( IOException e) {
 
 			e.printStackTrace();
 		}
-     Map<String , Object> response = new HashMap<>();
-     response.put("Incident",currentIncident);
-     response.put("MailResponse", new MailResponse("Email sent successfully !! ",true));
-		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
+		catch(MessagingException me ) {
+			me.printStackTrace();
+		}
+		Map<String, Object> response = new HashMap<String, Object>();
+		response.put("Incident", currentIncident);
+		response.put("MailResponse", new MailResponse("Email sent successfully !! ", true));
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
 	}
 

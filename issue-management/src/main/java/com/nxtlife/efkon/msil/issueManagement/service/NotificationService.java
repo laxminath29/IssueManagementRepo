@@ -52,10 +52,14 @@ public class NotificationService {
 		msgBodyPart.setContent(request.getContent(), "text/html");
 		Multipart multipart = new MimeMultipart();
 		multipart.addBodyPart(msgBodyPart);
-
+        
+		if(request.getFilePath()!=null)
+		{
 		MimeBodyPart attachPart = new MimeBodyPart();
 		attachPart.attachFile(request.getFilePath());
 		multipart.addBodyPart(attachPart);
+		}
+		
 		msg.setContent(multipart);
 		Transport.send(msg);
 

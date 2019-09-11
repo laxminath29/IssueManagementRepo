@@ -6,5 +6,5 @@ public interface EmailConstants {
  
      String FROM_PASSWORD = "vts@1234";
  
-     String TO_EMAIL = "laxmi.ssj4@gmail.com";
+     String TO_EMAIL = "vtscustomersupport@efkonindia.com";
 }

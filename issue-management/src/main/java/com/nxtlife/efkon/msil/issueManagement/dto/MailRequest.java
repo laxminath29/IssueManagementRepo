@@ -10,11 +10,20 @@ public class MailRequest {
 		super();
 	}
 
-	public MailRequest(String content, String subject, String filePath) {
+	public MailRequest(String content, String subject) {
 		super();
 
 		this.content = content;
 		this.subject = subject;
+		
+	}
+	
+	
+
+	public MailRequest(String subject, String content, String filePath) {
+		super();
+		this.subject = subject;
+		this.content = content;
 		this.filePath = filePath;
 	}
 

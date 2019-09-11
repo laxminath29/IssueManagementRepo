@@ -11,8 +11,8 @@ public enum IssueType {
 	
 	private String value;
 	
-	public static  Map<String,IssueType> mapping = new HashMap<>();
-	public static  Map<IssueType,String> revMapping = new HashMap<>();
+	public static  Map<String,IssueType> mapping = new HashMap<String,IssueType>();
+	public static  Map<IssueType,String> revMapping = new HashMap<IssueType,String>();
 	
 	static {
 		mapping.put(IssueType.NRD.value,IssueType.NRD);
@@ -30,7 +30,7 @@ public enum IssueType {
 	}
 	
 	public static List<String> getIssueTypes(){
-		List<String> issueTypes = new ArrayList<>();
+		List<String> issueTypes = new ArrayList<String>();
 		for(IssueType itype : IssueType.values()) {
 			issueTypes.add(itype.value);
 		}

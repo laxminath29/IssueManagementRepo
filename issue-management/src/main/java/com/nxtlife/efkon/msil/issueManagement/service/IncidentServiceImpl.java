@@ -20,9 +20,9 @@ public class IncidentServiceImpl implements IncidentService {
 
 	@Override
 	public List<Incident> getAllIncidents() {
-		List<Incident> incidentList = new ArrayList<>();
+		List<Incident> incidentList = new ArrayList<Incident>();
 
-		incidentRepository.findAll().forEach(incidentList::add);
+		incidentList.addAll(incidentRepository.findAll());
 		for(Incident incident : incidentList) {
 			incident.setIssueTypeStr(IssueType.revMapping.get(incident.getIssueType()));
 		}
@@ -36,7 +36,7 @@ public class IncidentServiceImpl implements IncidentService {
 		if (incidentID == null) {
 			throw new IllegalArgumentException("Incident Id can not be Empty/null ..");
 		}
-		Incident incident = incidentRepository.findById(incidentID).orElse(null);
+		Incident incident = incidentRepository.findOne(incidentID);
 		
 
 		if (incident == null) {
@@ -94,8 +94,8 @@ public class IncidentServiceImpl implements IncidentService {
 			throw new IllegalArgumentException("Incident Id can not be Empty/null ..");
 		}
 
-		if (incidentRepository.existsById(incidentId)) {
-			incidentRepository.deleteById(incidentId);
+		if (incidentRepository.exists(incidentId)) {
+			incidentRepository.delete(incidentId);
 		} else {
 			throw new CustomException("Can not delete as the specified record is not present..");
 		}
