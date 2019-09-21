@@ -132,7 +132,7 @@ public class IncidentController {
 
 		MailRequest mailRequest = new MailRequest(
 				"<b> Incident ID :</b>" + currentIncident.getIncidentID() + "<br> <b>Issue Type: </b>"
-						+ currentIncident.getIssueType() + "<br> <b>Transporter Name : </b>"
+						+ currentIncident.getIssueTypeStr() + "<br> <b>Transporter Name : </b>"
 						+ currentIncident.getTransporterName() + "<br><b> Transporter ID :</b>"
 						+ currentIncident.getTransporterID() + "<br> <b>Remarks : </b>" + currentIncident.getRemarks()
 						+ "<br> <b>Report Time : </b>" + currentIncident.getReportDateTime(),

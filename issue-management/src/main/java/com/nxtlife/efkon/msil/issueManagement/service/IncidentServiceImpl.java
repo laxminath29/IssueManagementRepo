@@ -23,9 +23,11 @@ public class IncidentServiceImpl implements IncidentService {
 		List<Incident> incidentList = new ArrayList<Incident>();
 
 		incidentList.addAll(incidentRepository.findAll());
-		for(Incident incident : incidentList) {
-			incident.setIssueTypeStr(IssueType.revMapping.get(incident.getIssueType()));
-		}
+		
+		  for(Incident incident : incidentList) {
+		  incident.setIssueTypeStr(IssueType.revMapping.get(incident.getIssueType()));
+		  }
+		 
 		
 		return incidentList;
 
@@ -52,9 +54,13 @@ public class IncidentServiceImpl implements IncidentService {
 			throw new IllegalArgumentException("Incident record passed can not be empty/null .");
 		}
         incident.setReportDateTime( new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
-        incident.setIssueType(IssueType.mapping.get(incident.getIssueTypeStr().toString()));
+        
+        incident.setIssueType(IssueType.mapping.get(incident.getIssueTypeStr()));
+        //incident.setIssueTypeStr(incident.getIssueTypeStr());
+       Incident savedIncident = incidentRepository.save(incident);
        
-		return incidentRepository.save(incident);
+       savedIncident.setIssueTypeStr(IssueType.revMapping.get(savedIncident.getIssueType()));
+		return savedIncident;
 	}
 
 	@Override
@@ -74,8 +80,10 @@ public class IncidentServiceImpl implements IncidentService {
 		currentIncident.setContactNumber(incident.getContactNumber());
 		currentIncident.setEmail(incident.getEmail());
 		currentIncident.setIsClosed(incident.getIsClosed());
-		currentIncident.setIssueType(IssueType.mapping.get(incident.getIssueTypeStr().toString()));
+		//currentIncident.setIssueTypeStr(incident.getIssueTypeStr());
+		currentIncident.setIssueType(IssueType.mapping.get(incident.getIssueTypeStr()));
 		currentIncident.setLocation(incident.getLocation());
+		
 		currentIncident.setRemarks(incident.getRemarks());
 		currentIncident.setTransporterName(incident.getTransporterName());
 		currentIncident.setVehicleNumber(incident.getVehicleNumber());
@@ -83,9 +91,10 @@ public class IncidentServiceImpl implements IncidentService {
 		currentIncident.setTransporterID(incident.getTransporterID());
 		currentIncident.setReportDateTime( new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
 		
+		Incident savedIncident = incidentRepository.save(currentIncident);
+		savedIncident.setIssueTypeStr(IssueType.revMapping.get(savedIncident.getIssueType()));
 
-		return incidentRepository.save(currentIncident);
-
+		return savedIncident;
 	}
 
 	@Override
@@ -119,9 +128,11 @@ public class IncidentServiceImpl implements IncidentService {
 		if (incidentList.isEmpty()) {
 			throw new CustomException("Incidents for Transporter having ID : " + transporterID + " does not exist..");
 		}
-		for(Incident incident : incidentList) {
-			incident.setIssueTypeStr(IssueType.revMapping.get(incident.getIssueType()));
-		}
+		
+		  for(Incident incident : incidentList) {
+		  incident.setIssueTypeStr(IssueType.revMapping.get(incident.getIssueType()));
+		  }
+		 
 
 		return incidentList;
 	}

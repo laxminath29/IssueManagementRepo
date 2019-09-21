@@ -63,14 +63,7 @@ public class Incident {
 	
 	
 
-	public String getIssueTypeStr() {
-		return issueTypeStr;
-	}
-
-	public void setIssueTypeStr(String issueTypeStr) {
-		this.issueTypeStr = issueTypeStr;
-	}
-
+	
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -86,7 +79,7 @@ public class Incident {
 	public Long getIncidentID() {
 		return incidentID;
 	}
-
+	
 	public IssueType getIssueType() {
 		return issueType;
 	}
@@ -94,7 +87,15 @@ public class Incident {
 	public void setIssueType(IssueType issueType) {
 		this.issueType = issueType;
 	}
+	
+	public String getIssueTypeStr() {
+		return issueTypeStr;
+	}
 
+	public void setIssueTypeStr(String issueTypeStr) {
+		this.issueTypeStr = issueTypeStr;
+	}
+	
 	public String getTransporterName() {
 		return transporterName;
 	}
@@ -169,8 +170,10 @@ public class Incident {
 
 	@PrePersist
 	private void isClosedIntially() {
+		
 		setIsClosed(false);
-		setIssueType(IssueType.OTHER);
+		if(this.issueType==null)
+		  setIssueType(IssueType.OTHER);
 	}
 
 	public Incident() {
@@ -182,6 +185,7 @@ public class Incident {
 			@NotNull String transporterID, String username) {
 		super();
 		this.issueTypeStr = issueTypeStr;
+		
 		this.transporterName = transporterName;
 		this.email = email;
 		this.contactNumber = contactNumber;
@@ -197,6 +201,7 @@ public class Incident {
 			Boolean isClosed, @NotNull String transporterID, String username) {
 		super();
 		this.issueTypeStr = issueTypeStr;
+		
 		this.transporterName = transporterName;
 		this.remarks = remarks;
 		this.isClosed = isClosed;
@@ -208,6 +213,7 @@ public class Incident {
 			@NotNull String transporterID) {
 		super();
 		this.issueTypeStr = issueTypeStr;
+		
 		this.transporterName = transporterName;
 		this.remarks = remarks;
 		this.transporterID = transporterID;

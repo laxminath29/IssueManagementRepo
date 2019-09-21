@@ -7,7 +7,7 @@ import java.util.Map;
 
 public enum IssueType {
 
-	NRD ("NRD") , ID_RELATED("Id Related"), OTHER("Other");
+	HARDWARE ("Hardware") , SOFTWARE("Software"), OTHER("Other");
 	
 	private String value;
 	
@@ -15,11 +15,11 @@ public enum IssueType {
 	public static  Map<IssueType,String> revMapping = new HashMap<IssueType,String>();
 	
 	static {
-		mapping.put(IssueType.NRD.value,IssueType.NRD);
-		mapping.put(IssueType.ID_RELATED.value,IssueType.ID_RELATED);
+		mapping.put(IssueType.HARDWARE.value,IssueType.HARDWARE);
+		mapping.put(IssueType.SOFTWARE.value,IssueType.SOFTWARE);
 		mapping.put(IssueType.OTHER.value,IssueType.OTHER);
-		revMapping.put(IssueType.NRD,IssueType.NRD.value );
-		revMapping.put(IssueType.ID_RELATED,IssueType.ID_RELATED.value );
+		revMapping.put(IssueType.HARDWARE,IssueType.HARDWARE.value );
+		revMapping.put(IssueType.SOFTWARE,IssueType.SOFTWARE.value );
 		revMapping.put(IssueType.OTHER,IssueType.OTHER.value );
 		
 		

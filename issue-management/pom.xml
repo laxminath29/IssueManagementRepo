@@ -14,7 +14,7 @@
 	<groupId>com.nxtlife.efkon.msil</groupId>
 	<artifactId>com.nxtlife.efkon.msil.issueManagement</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 
 	<name>issue-management</name>
 	<description>system to record and fetch isssues</description>
