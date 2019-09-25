@@ -1,15 +1,19 @@
 package com.nxtlife.efkon.msil.issueManagement.service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.datetime.joda.LocalDateTimeParser;
 import org.springframework.stereotype.Service;
 
 import com.nxtlife.efkon.msil.issueManagement.entity.Incident;
 import com.nxtlife.efkon.msil.issueManagement.repository.IncidentRepository;
 import com.nxtlife.efkon.msil.issueManagement.utility.CustomException;
+import com.nxtlife.efkon.msil.issueManagement.utility.GetTimestamp;
 import com.nxtlife.efkon.msil.issueManagement.utility.IssueType;
 
 @Service
@@ -26,6 +30,8 @@ public class IncidentServiceImpl implements IncidentService {
 		
 		  for(Incident incident : incidentList) {
 		  incident.setIssueTypeStr(IssueType.revMapping.get(incident.getIssueType()));
+		  //incident.setReportDateTime( Timestamp.valueOf( incident.getReportDateTime().toString()));
+		 // incident.setReportDateTime(new Timestamp(incident.getReportDateTime().getTime()));
 		  }
 		 
 		
@@ -45,6 +51,7 @@ public class IncidentServiceImpl implements IncidentService {
 			throw new CustomException("Incident having ID : " + incidentID + " does not exist..");
 		}
 		incident.setIssueTypeStr(IssueType.revMapping.get(incident.getIssueType()));
+		//incident.setReportDateTime(new Timestamp(incident.getReportDateTime().getTime()));
 		return incident;
 	}
 
@@ -53,13 +60,14 @@ public class IncidentServiceImpl implements IncidentService {
 		if (incident == null) {
 			throw new IllegalArgumentException("Incident record passed can not be empty/null .");
 		}
-        incident.setReportDateTime( new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
+        incident.setReportDateTime( LocalDateTime.now());
         
         incident.setIssueType(IssueType.mapping.get(incident.getIssueTypeStr()));
         //incident.setIssueTypeStr(incident.getIssueTypeStr());
        Incident savedIncident = incidentRepository.save(incident);
        
        savedIncident.setIssueTypeStr(IssueType.revMapping.get(savedIncident.getIssueType()));
+       //savedIncident.setReportDateTime(new Timestamp(savedIncident.getReportDateTime().getTime()));
 		return savedIncident;
 	}
 
@@ -83,16 +91,17 @@ public class IncidentServiceImpl implements IncidentService {
 		//currentIncident.setIssueTypeStr(incident.getIssueTypeStr());
 		currentIncident.setIssueType(IssueType.mapping.get(incident.getIssueTypeStr()));
 		currentIncident.setLocation(incident.getLocation());
-		
+		currentIncident.setSupportRemark(incident.getSupportRemark());
 		currentIncident.setRemarks(incident.getRemarks());
 		currentIncident.setTransporterName(incident.getTransporterName());
 		currentIncident.setVehicleNumber(incident.getVehicleNumber());
 		currentIncident.setUserName(incident.getUsername());
 		currentIncident.setTransporterID(incident.getTransporterID());
-		currentIncident.setReportDateTime( new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
+		currentIncident.setReportDateTime( incident.getReportDateTime());
 		
 		Incident savedIncident = incidentRepository.save(currentIncident);
 		savedIncident.setIssueTypeStr(IssueType.revMapping.get(savedIncident.getIssueType()));
+		//savedIncident.setReportDateTime(new Timestamp(savedIncident.getReportDateTime().getTime()));
 
 		return savedIncident;
 	}
