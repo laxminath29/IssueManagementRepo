@@ -1,7 +1,9 @@
 package com.nxtlife.efkon.msil.issueManagement.entity;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +20,7 @@ import javax.persistence.Transient;
 import org.hibernate.validator.constraints.Email;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nxtlife.efkon.msil.issueManagement.utility.IssueType;
 
 @Entity
@@ -48,6 +51,8 @@ public class Incident {
 
 	@NotNull
 	private String remarks;
+	
+	private String supportRemark;
 
 	private String location;
 
@@ -55,7 +60,12 @@ public class Incident {
 
 	private Boolean isClosed;
 	
-	private Timestamp reportDateTime;
+	
+	private LocalDateTime reportDateTime;
+	
+	@Transient
+	private String reportDateTimeStr;
+	
 	
 	@NotNull
 	@Transient
@@ -68,13 +78,27 @@ public class Incident {
 		this.username = username;
 	}
 
-	public Timestamp getReportDateTime() {
+	@JsonIgnore
+	public LocalDateTime getReportDateTime() {
+		
 		return reportDateTime;
 	}
 
-	public void setReportDateTime(Timestamp timestamp) {
-		this.reportDateTime = timestamp;
+	public void setReportDateTime(LocalDateTime reportDateTime) {
+		this.reportDateTime = reportDateTime;
+		setReportDateTimeStr(this.reportDateTime==null?" ":this.reportDateTime.toString());
 	}
+	
+	
+	public String getReportDateTimeStr() {
+		
+		return reportDateTimeStr=reportDateTime==null?" ":reportDateTime.toString();
+	}
+
+	public void setReportDateTimeStr(String reportDateTimeStr) {
+		this.reportDateTimeStr = reportDateTimeStr;
+	}
+
 
 	public Long getIncidentID() {
 		return incidentID;
@@ -144,6 +168,15 @@ public class Incident {
 		this.remarks = remarks;
 	}
 
+	
+	public String getSupportRemark() {
+		return supportRemark;
+	}
+
+	public void setSupportRemark(String supportRemark) {
+		this.supportRemark = supportRemark;
+	}
+
 	public String getLocation() {
 		return location;
 	}
@@ -174,6 +207,8 @@ public class Incident {
 		setIsClosed(false);
 		if(this.issueType==null)
 		  setIssueType(IssueType.OTHER);
+		if(this.supportRemark==null)
+			setSupportRemark(" ");
 	}
 
 	public Incident() {
@@ -182,7 +217,7 @@ public class Incident {
 
 	public Incident(@NotNull String issueTypeStr, @NotNull String transporterName, @Email String email,
 			String contactNumber, @NotNull String remarks, String location, String vehicleNumber, Boolean isClosed,
-			@NotNull String transporterID, String username) {
+			@NotNull String transporterID, String username , String supportRemark) {
 		super();
 		this.issueTypeStr = issueTypeStr;
 		
@@ -195,13 +230,14 @@ public class Incident {
 		this.isClosed = isClosed;
 		this.transporterID = transporterID;
 		this.username = username;
+		this.supportRemark=supportRemark;
 	}
 
 	public Incident(@NotNull String issueTypeStr, @NotNull String transporterName, @NotNull String remarks,
-			Boolean isClosed, @NotNull String transporterID, String username) {
+			Boolean isClosed, @NotNull String transporterID, String username , String supportRemark) {
 		super();
 		this.issueTypeStr = issueTypeStr;
-		
+		this.supportRemark=supportRemark;
 		this.transporterName = transporterName;
 		this.remarks = remarks;
 		this.isClosed = isClosed;
