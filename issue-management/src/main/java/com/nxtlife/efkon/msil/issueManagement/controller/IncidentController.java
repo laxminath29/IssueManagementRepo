@@ -1,5 +1,6 @@
 package com.nxtlife.efkon.msil.issueManagement.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,11 +10,14 @@ import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nxtlife.efkon.msil.issueManagement.entity.Incident;
 import com.nxtlife.efkon.msil.issueManagement.service.IncidentServiceImpl;
 import com.nxtlife.efkon.msil.issueManagement.utility.CustomException;
+import com.nxtlife.efkon.msil.issueManagement.utility.GenerateExcelReport;
 import com.nxtlife.efkon.msil.issueManagement.utility.IssueType;
 import com.nxtlife.efkon.msil.issueManagement.dto.HttpResponseDto;
 import com.nxtlife.efkon.msil.issueManagement.dto.MailRequest;
@@ -57,6 +62,26 @@ public class IncidentController {
 		return new ResponseEntity<List<String>>(IssueType.getIssueTypes(), HttpStatus.OK);
 	}
 
+	@GetMapping(value = "/excel")
+	public ResponseEntity<?> excelIncidentssReport() throws IOException {
+	    List<Incident> incidentsList =  incidentServiceImpl.getAllIncidents();
+	    if (incidentsList.isEmpty()) {
+			return new ResponseEntity<HttpResponseDto>(
+					new HttpResponseDto("There are no Incidents in the record ..", HttpStatus.NO_CONTENT),
+					HttpStatus.OK);
+		}
+	    
+	    ByteArrayInputStream in = GenerateExcelReport.usersToExcel(incidentsList);
+	    System.out.println(in);
+	    // return IO ByteArray(in);
+	    HttpHeaders headers = new HttpHeaders();
+	    //headers.add("fileName"," Incidents.xls");
+	    
+	    // set filename in header
+	    headers.add("Content-Disposition", "attachment; filename=Incidents.xlsx");
+	    return ResponseEntity.ok().headers(headers).body(new InputStreamResource(in));
+	}
+	
 	@GetMapping
 	public ResponseEntity<?> getAllIncidents() {
 		List<Incident> incidentsList = incidentServiceImpl.getAllIncidents();
