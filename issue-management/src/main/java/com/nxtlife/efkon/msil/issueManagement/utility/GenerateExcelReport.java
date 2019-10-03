@@ -18,7 +18,7 @@ import com.nxtlife.efkon.msil.issueManagement.entity.Incident;
 
 public class GenerateExcelReport {
 
-	public static ByteArrayInputStream usersToExcel(List<Incident> incidents) throws IOException {
+	public static ByteArrayInputStream incidentsToExcel(List<Incident> incidents) throws IOException {
 		String[] COLUMNs = { "Incident Id", "Transporter Id", "Transporter Name", "Username", "Email", "Contact Number",
 				"Location", "Report Timestamp", "Issue Type", "Is Closed", "Vehicle Number", "Remarks","Support Remark" };
 		try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
