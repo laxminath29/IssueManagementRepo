@@ -97,7 +97,7 @@ public class IncidentServiceImpl implements IncidentService {
 		currentIncident.setVehicleNumber(incident.getVehicleNumber());
 		currentIncident.setUserName(incident.getUsername());
 		currentIncident.setTransporterID(incident.getTransporterID());
-		currentIncident.setReportDateTime( incident.getReportDateTime());
+		currentIncident.setReportDateTime( incidentRepository.findOne(incidentID).getReportDateTime());
 		
 		Incident savedIncident = incidentRepository.save(currentIncident);
 		savedIncident.setIssueTypeStr(IssueType.revMapping.get(savedIncident.getIssueType()));
