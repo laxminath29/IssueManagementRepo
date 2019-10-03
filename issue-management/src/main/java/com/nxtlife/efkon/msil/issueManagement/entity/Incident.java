@@ -207,8 +207,7 @@ public class Incident {
 		setIsClosed(false);
 		if(this.issueType==null)
 		  setIssueType(IssueType.OTHER);
-		if(this.supportRemark==null)
-			setSupportRemark(" ");
+		
 	}
 
 	public Incident() {
