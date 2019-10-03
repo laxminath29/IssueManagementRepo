@@ -6,6 +6,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,8 @@ public class NotificationController {
 	@Autowired
 	private NotificationService notificationService;
 
-	@PostMapping("/sendingEmail")
+	@PreAuthorize("hasAnyRole('SUPPORT')")
+	@PostMapping("/support/sendingEmail")
 	public MailResponse sendEmail(@RequestBody MailRequest request)
 			throws AddressException, MessagingException, IOException {
 		notificationService.sendEmail(request);
