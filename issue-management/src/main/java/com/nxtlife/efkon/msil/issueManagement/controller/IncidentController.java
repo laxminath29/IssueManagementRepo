@@ -20,6 +20,8 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nxtlife.efkon.msil.issueManagement.entity.Incident;
+import com.nxtlife.efkon.msil.issueManagement.entity.User;
+import com.nxtlife.efkon.msil.issueManagement.repository.UserRepository;
 import com.nxtlife.efkon.msil.issueManagement.service.IncidentServiceImpl;
 import com.nxtlife.efkon.msil.issueManagement.utility.CustomException;
 import com.nxtlife.efkon.msil.issueManagement.utility.GenerateExcelReport;
@@ -55,15 +59,31 @@ public class IncidentController {
 	 * Resource resource = resourceLoader.getResource("classpath:efkonLogo.png");
 	 * 
 	 */
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	UserRepository userRepository;
 
-	@GetMapping(value = "/issueType")
+	@PostMapping("/v1/admin/add")
+	public String addUserByAdmin(@RequestBody User user) {
+		String pwd = user.getPassword();
+		String encryptPwd = passwordEncoder.encode(pwd);
+		user.setPassword(encryptPwd);
+		userRepository.save(user);
+		return "user added successfully...";
+	}
+	
+	
+	@GetMapping(value = "/v1/issueType")
 	public ResponseEntity<?> getIssueType() {
 
 		return new ResponseEntity<List<String>>(IssueType.getIssueTypes(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/excel")
-	public ResponseEntity<?> excelIncidentssReport() throws IOException {
+	@PreAuthorize("hasAnyRole('SUPPORT')")
+	@GetMapping(value = "/support/all/excel")
+	public ResponseEntity<?> excelIncidentsReport() throws IOException {
 	    List<Incident> incidentsList =  incidentServiceImpl.getAllIncidents();
 	    if (incidentsList.isEmpty()) {
 			return new ResponseEntity<HttpResponseDto>(
@@ -71,7 +91,7 @@ public class IncidentController {
 					HttpStatus.OK);
 		}
 	    
-	    ByteArrayInputStream in = GenerateExcelReport.usersToExcel(incidentsList);
+	    ByteArrayInputStream in = GenerateExcelReport.incidentsToExcel(incidentsList);
 	    System.out.println(in);
 	    // return IO ByteArray(in);
 	    HttpHeaders headers = new HttpHeaders();
@@ -82,7 +102,8 @@ public class IncidentController {
 	    return ResponseEntity.ok().headers(headers).body(new InputStreamResource(in));
 	}
 	
-	@GetMapping
+	@PreAuthorize("hasAnyRole('SUPPORT')")
+	@GetMapping(value="/support/all")
 	public ResponseEntity<?> getAllIncidents() {
 		List<Incident> incidentsList = incidentServiceImpl.getAllIncidents();
 		if (incidentsList.isEmpty()) {
@@ -93,7 +114,7 @@ public class IncidentController {
 		return new ResponseEntity<List<Incident>>(incidentsList, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/{incidentID}")
+	@GetMapping(value = "/v1/{incidentID}")
 	public ResponseEntity<?> getIncidentById(@PathVariable Long incidentID) {
 		Incident incident;
 		try {
@@ -110,7 +131,7 @@ public class IncidentController {
 		return new ResponseEntity<Incident>(incident, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "transporter/{transporterID}")
+	@GetMapping(value = "/v1/transporter/{transporterID}")
 
 	public ResponseEntity<?> getIncidentsByTransporterID(@PathVariable String transporterID) {
 		List<Incident> incident;
@@ -129,7 +150,7 @@ public class IncidentController {
 
 	}
 
-	@PutMapping(value = "/{incidentID}")
+	@PutMapping(value = "/v1/{incidentID}")
 	public ResponseEntity<?> updateIncident(@PathVariable Long incidentID, @RequestBody Incident incident) {
 		Incident currentIncident;
 		try {
@@ -144,7 +165,7 @@ public class IncidentController {
 		return new ResponseEntity<Incident>(currentIncident, HttpStatus.OK);
 	}
 
-	@PostMapping
+	@PostMapping(value="/v1/")
 	public ResponseEntity<?> saveIncident(@RequestBody Incident incident) {
 
 		Incident currentIncident;
@@ -178,7 +199,8 @@ public class IncidentController {
 
 	}
 
-	@DeleteMapping(value = "/{incidentID}")
+	
+	@DeleteMapping(value = "/v1/{incidentID}")
 	public ResponseEntity<?> deleteIncidentByID(@PathVariable Long incidentID) {
 
 		try {
@@ -194,7 +216,8 @@ public class IncidentController {
 				HttpStatus.OK);
 	}
 
-	@DeleteMapping
+	@PreAuthorize("hasAnyRole('SUPPORT')")
+	@DeleteMapping(value="/support/all/")
 	public ResponseEntity<?> deleteAllIncidents() {
 		incidentServiceImpl.deleteAllIncidents();
 		return new ResponseEntity<HttpResponseDto>(new HttpResponseDto("Deleted Successfully..", HttpStatus.NO_CONTENT),
