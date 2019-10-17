@@ -1,0 +1,46 @@
+<div class="login-main">
+  <div class="login">
+    <div class="logo">
+      <img src="assets/images/logo.jpg" alt="logo">
+    </div>
+    <form class="inputform" #formInput="ngForm" (ngSubmit)="onSubmit(formInput)">
+      <div class="form-group">
+        <div class="input-main">
+          <label for="email"><i class="fa fa-user-circle" aria-hidden="true"></i></label>
+          <input type="email" class="form-control" name="email" id="email" aria-describedby="helpId"
+            [(ngModel)]="inputForm.email" placeholder="Email" required pattern="[^ @]*@[^ @]*" #email="ngModel"
+            [ngClass]="{
+        'is-invalid':email.touched&&email.invalid,
+        'is-valid': email.touched && email.valid
+      }">
+        </div>
+        <div class="form-control-feedback" *ngIf="email.errors && (email.dirty || email.touched)">
+          <small *ngIf="email.errors.required" [ngClass]="{'text-danger': email.touched&&email.invalid}">Email is
+            required</small>
+          <small *ngIf="email.errors.pattern" [ngClass]="{'text-danger': email.touched&&email.invalid}">Email must
+            contain at least the @ character</small>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-main">
+          <label for="password"><i class="fa fa-unlock-alt" aria-hidden="true"></i></label>
+          <input type="password" class="form-control" name="password" [(ngModel)]="inputForm.password" id="password"
+            aria-describedby="helpId" placeholder="Password" required minlength="8" #pwd="ngModel" [ngClass]="{
+          'is-invalid':(pwd.dirty || pwd.touched)&&pwd.invalid,
+          'is-valid':(pwd.dirty || pwd.touched) && pwd.valid
+        }">
+        </div>
+        <div class="form-control-feedback" *ngIf="pwd.errors && (pwd.dirty || pwd.touched)">
+          <small *ngIf="pwd.errors.required"
+            [ngClass]="{'text-danger': (pwd.touchedc || pwd.dirty) &&pwd.invalid}">Password is required</small>
+          <small *ngIf="pwd.errors.minlength"
+            [ngClass]="{'text-danger': (pwd.touched || pwd.dirty) &&pwd.invalid}">Password must be at least 8 characters
+            long</small>
+        </div>
+      </div>
+
+
+      <button class="btn btn-info text-white tex-center" [disabled]="formInput.invalid" type="submit">LOGIN</button>
+    </form>
+  </div>
+</div>

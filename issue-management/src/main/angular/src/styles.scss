@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+.showbtn{
+    background: #183159;
+    border: 0px;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 15px;
+    min-width: 110px;
+    &:focus{
+        outline: none;
+    }
+}

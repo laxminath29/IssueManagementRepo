@@ -1,0 +1,168 @@
+<div *ngIf="spinner" class="spinner">
+  <app-self-building-square-spinner [animationDuration]="1500" [size]="100"
+    [color]="'linear-gradient(to right top, #051937, #20295f, #4a3686, #7e3ea7, #ba3dc0)'">
+  </app-self-building-square-spinner>
+
+</div>
+<div *ngIf="!spinner && !incidences.length">
+  <div class="error-header">
+  </div>
+  <div class="container ">
+    <section class="error-container text-center">
+      <div class="error404">
+        <h1>404</h1>
+      </div>
+      <div class="error-divider">
+        <h2>PAGE NOT FOUND.</h2>
+        <p class="description">We Couldn't Find This Page</p>
+        <button class="error-btn" (click)="retry()">GO BACK HOME</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="header_main" *ngIf="!spinner && incidences.length">
+  <div class="container-fluid">
+    <div class="header">
+      <div class="logo">
+        <a href=""> <img src="assets/images/logo.png" alt="logo"></a>
+      </div>
+      <div class="issue_type_main">
+        <div class="issue_select">
+          <span>
+            Issue Type
+          </span>
+          <select #sel class="custom-select custom-select-sm" (change)="filter(sel.value)">
+            <option value="all">All</option>
+            <option value="Hardware">Hardware</option>
+            <option value="Software">Software</option>
+            <option value="Other">Other</option>
+
+          </select>
+        </div>
+        <div class="download">
+          <a href="http://192.168.1.43:8000/incidents/support/all/excel?access_token={{auth.getToken()}}"><i
+              class="fa fa-download" aria-hidden="true"></i>DownloadCSV </a>
+        </div>
+        <button class="logout" type="submit" *ngIf="auth.isLoggedIn()" (click)="auth.logout()"><i class="fa fa-sign-in"
+            aria-hidden="true"></i>
+          Logout</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="dashboard_main" *ngIf="!spinner && incidences.length">
+  <div class="container-fluid">
+    <div class="row" *ngIf="!spinner && incidences.length">
+      <div class="col p-0">
+        <!-- <div class="title">
+          <h2>INCIDENTS</h2>
+        </div> -->
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th class="trans">Transporter Name</th>
+              <th class="no-wrape text-center">Issue Type</th>
+              <th class="subject"> Incident Subject Line</th>
+              <th class="created" (click)="sortData()">Date/Time Incident Created<i class="fa" [ngClass]="toggle?'fa-arrow-up':'fa-arrow-down'" aria-hidden="true"></i></th>
+              <th class="text-center">Date/Time Incident Resolved</th>
+              <th class="text-center time">Time Taken to Resolve Incident</th>
+              <th class="user-remark">Incident Remark</th>
+              <th class="support">Support Remark</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let incidence of incidences" (click)="showDetail($event,incidence)" [ngClass]="selectedItem==incidence?'active':''">
+              <td> {{ incidence.transporterName }}</td>
+              <td class="text-center"> {{ incidence.issueTypeStr }}</td>
+              <td>The placeholder text, 
+                elit”, looks like Latin because in its youth, centuries ago,</td>
+              <td class="newtxt">{{incidence.reportDateTimeStr | date:'medium'}}
+              </td>
+     <!-- <td class="newtxt">{{incidence.resolvedDateTimeStr}} -->
+              <!-- <td class="newtxt">{{incidence.resolvedDateTimeStr|| '' | date: 'dd/MM/yyyy'}}</td> -->
+              <td class="newtxt">{{incidence.resolvedDateTimeStr !== null ? (incidence.resolvedDateTimeStr | date: 'medium') : ""}}
+              </td>
+              <td >{{calHour(incidence.resolvedDateTimeStr ,incidence.reportDateTimeStr)}}</td>
+              <td>beginning with the line “Lorem ipsum dolor sit amet, consectetur adipiscing</td>
+              <td>{{incidence.supportRemark}}</td>
+              <!-- <td class="text-center">
+                <button class="showbtn" (click)="showDetail($event,incidence)" data-toggle="modal"
+                  data-target="#exampleModal">
+                  Show details</button>
+              </td> -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+      <div class="col-md-4 pr-0" *ngIf="selectedIncident">
+        <div class="details-table">
+          <!-- <div class="title">
+            <h2>INCIDENTS DETAILS</h2>
+          </div> -->
+
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th colspan="2">Details <button class="close-btn" *ngIf="selectedIncident" (click)="gotoback()"><i
+                      class="fa fa-close" aria-hidden="true"></i></button></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="detaile-title">IssueType</td>
+                <td>{{selectedIncident.issueTypeStr}}</td>
+              </tr>
+              <tr>
+                <td class="detaile-title">Incident Remark</td>
+                <td>{{selectedIncident.remarks}}</td>
+              </tr>
+              <tr *ngIf="selectedIncident.subjectLine">
+                <td class="detaile-title">Subject Line</td>
+                <td>{{selectedIncident.subjectLine}}</td>
+              </tr>
+              <tr>
+                <td class="detaile-title">Transpoter Name</td>
+                <td>{{selectedIncident.transporterName}}</td>
+              </tr>
+              <tr>
+                <td class="detaile-title">Date/Time Incident Created</td>
+                <td>{{selectedIncident.reportDateTimeStr| date:'medium'}}</td>
+              </tr>
+              <tr *ngIf="selectedIncident.resolvedDateTimeStr.length>0">
+                <td class="detaile-title">Date/Time Incident Resolved</td>
+                <td>{{selectedIncident.resolvedDateTimeStr| date:'medium'}}</td>
+              </tr>
+              <tr *ngIf="selectedIncident.supportRemark">
+                <td class="detaile-title">Support Remark:</td>
+                <td>{{selectedIncident.supportRemark}}<i class="fa fa-pencil" aria-hidden="true" (click)="editRemark()"></i></td>
+              </tr>
+            </tbody>
+
+          </table>
+          <div class="textearia" *ngIf="!selectedIncident.supportRemark">
+            <!-- <form (ngSubmit)="f.form.valid && submitRemark(news)" #f="ngForm"> -->
+            <label for="exampleFormControlTextarea1">Enter Your Remark</label>
+            <textarea required class="form-control" id="exampleFormControlTextarea1" [(ngModel)]="olderRemark" #news="ngModel" rows="3"
+              placeholder="Enter your remark"></textarea>
+            <div class="field-error">
+              <small *ngIf="news.touched && news.errors">This field is required</small>
+              <small *ngIf="selectedIncident.supportRemark==null">{{errorData}}</small>
+            </div>
+            <button [disabled]="news.invalid" type="submit" class="showbtn"
+              (click)="submitRemark(news)">{{spinner1?"Please wait...":"Submit"}}
+              <span *ngIf="spinner1" class="spinner-border spinner-border-sm"></span>
+            </button>
+
+            <!-- </form> -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
