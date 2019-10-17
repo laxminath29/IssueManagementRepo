@@ -14,6 +14,10 @@ export class LoginComponent implements OnInit {
     email:'',
     password:''
   }
+  newInput={
+    email:'support@efkonindia.com',
+    password:'support123'
+  }
   constructor(private loginService:LoginService,private auth:AuthService,private router:Router) { }
 
   ngOnInit() {
@@ -22,16 +26,21 @@ export class LoginComponent implements OnInit {
   onSubmit(formData:NgForm){
       console.log(formData.value);
       // api call here
-    this.loginService.login().subscribe((token)=>{
-        console.log("the token is ",token);
-        console.log(token.access_token);
-        this.auth.sendToken(token.access_token);
-        if (this.auth.isLoggedIn()) {
-            this.router.navigate(['dashboard']);
-        }else{
-          this.router.navigate(['login']);
-        }
-         
-    });
+      if (formData.value.email==this.newInput.email && formData.value.password == this.newInput.password) {
+        this.loginService.login().subscribe((token)=>{
+          console.log("the token is ",token);
+          console.log(token.access_token);
+          this.auth.sendToken(token.access_token);
+          if (this.auth.isLoggedIn()) {
+              this.router.navigate(['dashboard']);
+          }else{
+            this.router.navigate(['login']);
+          }
+           
+      });
+      }else{
+        alert("Email or Password is invalid!");
+      }
+  
   }
 }

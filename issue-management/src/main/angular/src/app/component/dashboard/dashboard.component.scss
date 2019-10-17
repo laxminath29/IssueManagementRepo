@@ -123,10 +123,11 @@ body{
 	table{
 		position: relative;
 		td{
-			font-size: 16px;
+			font-size: 14px;
 			text-transform: capitalize;
-			padding: 8px 10px;
+			padding: 4px 5px;
 			vertical-align: middle;
+			text-align: center;
 		}
 		thead{
 			background: #3e3e3e;
@@ -136,11 +137,14 @@ body{
 			th {
 				font-weight: 500;
 				color: white;
+				position: -webkit-sticky;
 				position: sticky;
 				top: -1px;
 				background: #3e3e3e;
-				padding: 14px 10px;
+				padding: 5px 5px;
 				text-align: center;
+				vertical-align: middle;
+				font-size: 16px;
 			}
 		}
 	}
@@ -255,7 +259,6 @@ body{
 	float: right;
 	font-size: x-large;
 }
-
 
 
 

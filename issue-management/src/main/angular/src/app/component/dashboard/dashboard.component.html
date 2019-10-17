@@ -41,7 +41,7 @@
           </select>
         </div>
         <div class="download">
-          <a href="http://192.168.1.43:8000/incidents/support/all/excel?access_token={{auth.getToken()}}"><i
+          <a [href]="baseUrl + '/incidents/support/all/excel?access_token=' + auth.getToken()"><i
               class="fa fa-download" aria-hidden="true"></i>DownloadCSV </a>
         </div>
         <button class="logout" type="submit" *ngIf="auth.isLoggedIn()" (click)="auth.logout()"><i class="fa fa-sign-in"
@@ -121,7 +121,7 @@
                 <td class="detaile-title">Incident Remark</td>
                 <td>{{selectedIncident.remarks}}</td>
               </tr>
-              <tr *ngIf="selectedIncident.subjectLine">
+              <tr >
                 <td class="detaile-title">Subject Line</td>
                 <td>{{selectedIncident.subjectLine}}</td>
               </tr>
@@ -133,7 +133,7 @@
                 <td class="detaile-title">Date/Time Incident Created</td>
                 <td>{{selectedIncident.reportDateTimeStr| date:'medium'}}</td>
               </tr>
-              <tr *ngIf="selectedIncident.resolvedDateTimeStr.length>0">
+              <tr *ngIf="selectedIncident.resolvedDateTimeStr">
                 <td class="detaile-title">Date/Time Incident Resolved</td>
                 <td>{{selectedIncident.resolvedDateTimeStr| date:'medium'}}</td>
               </tr>

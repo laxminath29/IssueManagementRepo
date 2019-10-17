@@ -3,13 +3,12 @@ import { HttpClient, HttpResponse, HttpErrorResponse, HttpHeaders } from '@angul
 import { map, catchError } from 'rxjs/operators'
 import { throwError } from 'rxjs';
 import { NgxSpinnerService } from "ngx-spinner";
-
+import {environment} from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  // url = "http://192.168.1.43:8000";
-  url = window.location.origin;
+  url = environment.BASEURL;
 
   header: HttpHeaders;
   constructor(private http: HttpClient) { }

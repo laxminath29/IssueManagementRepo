@@ -3,6 +3,7 @@ import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { Dashboard } from './dashboard';
 import { ThrowStmt } from '@angular/compiler';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import {environment} from '../../../environments/environment';
 // import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
@@ -11,6 +12,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  baseUrl:string = environment.BASEURL;
   spinner = true;
   spinner1 = false;;
   newarr: Array<any>;
@@ -45,7 +47,7 @@ export class DashboardComponent implements OnInit {
   }
   public showDetail(event, contact) {
     this.selectedIncident = contact;
-
+      this.olderRemark = null;
     this.selectedItem = contact;
     console.log(this.selectedIncident);
   }
@@ -57,7 +59,7 @@ export class DashboardComponent implements OnInit {
   }
   submitRemark(data) {
     console.log(data);
-
+    this.olderRemark =null;
     let remarkBody = Object.assign({}, this.selectedIncident);
     remarkBody.supportRemark = data.value;
     delete remarkBody.incidentID;
