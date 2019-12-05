@@ -1,6 +1,7 @@
 package com.nxtlife.efkon.msil.issueManagement.controller;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -23,9 +24,9 @@ public class NotificationController {
 
 	@PreAuthorize("hasAnyRole('SUPPORT')")
 	@PostMapping("/support/sendingEmail")
-	public MailResponse sendEmail(@RequestBody MailRequest request)
-			throws AddressException, MessagingException, IOException {
-		notificationService.sendEmail(request);
+	public MailResponse sendEmail(@RequestBody MailRequest request , String fromEmail ,  String toEmail)
+			throws AddressException, MessagingException, IOException, GeneralSecurityException {
+		notificationService.sendEmail(request, fromEmail , toEmail);
 		return new MailResponse("Mail sent successfully", true);
 
 	}

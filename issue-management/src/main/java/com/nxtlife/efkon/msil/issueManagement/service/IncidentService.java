@@ -22,10 +22,4 @@ public interface IncidentService {
 
 	public void deleteAllIncidents();
 
-	/*
-	 * public List<Incident> getAllIncidentByIssueType(); public List<Incident>
-	 * getAllIncidentByTransporterName(); public List<Incident>
-	 * getAllIncidentByMailId(); public List<Incident> getAllIncidentByLocation();
-	 * public List<Incident> getAllIncidentByVehicleNumber();
-	 */
 }

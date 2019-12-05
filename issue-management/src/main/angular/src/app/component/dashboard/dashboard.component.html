@@ -77,8 +77,7 @@
             <tr *ngFor="let incidence of incidences" (click)="showDetail($event,incidence)" [ngClass]="selectedItem==incidence?'active':''">
               <td> {{ incidence.transporterName }}</td>
               <td class="text-center"> {{ incidence.issueTypeStr }}</td>
-              <td>The placeholder text, 
-                elit”, looks like Latin because in its youth, centuries ago,</td>
+              <td>{{incidence.subjectLine}}</td>
               <td class="newtxt">{{incidence.reportDateTimeStr | date:'medium'}}
               </td>
      <!-- <td class="newtxt">{{incidence.resolvedDateTimeStr}} -->
@@ -86,7 +85,7 @@
               <td class="newtxt">{{incidence.resolvedDateTimeStr !== null ? (incidence.resolvedDateTimeStr | date: 'medium') : ""}}
               </td>
               <td >{{calHour(incidence.resolvedDateTimeStr ,incidence.reportDateTimeStr)}}</td>
-              <td>beginning with the line “Lorem ipsum dolor sit amet, consectetur adipiscing</td>
+              <td>{{incidence.remarks}}</td>
               <td>{{incidence.supportRemark}}</td>
               <!-- <td class="text-center">
                 <button class="showbtn" (click)="showDetail($event,incidence)" data-toggle="modal"

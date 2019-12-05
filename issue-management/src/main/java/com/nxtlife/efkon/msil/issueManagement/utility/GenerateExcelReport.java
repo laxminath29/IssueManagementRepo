@@ -19,8 +19,8 @@ import com.nxtlife.efkon.msil.issueManagement.entity.Incident;
 public class GenerateExcelReport {
 
 	public static ByteArrayInputStream incidentsToExcel(List<Incident> incidents) throws IOException {
-		String[] COLUMNs = { "Incident Id", "Transporter Id", "Transporter Name", "Username", "Email", "Contact Number",
-				"Location", "Report Timestamp", "Issue Type", "Is Closed", "Vehicle Number", "Remarks","Support Remark" };
+		String[] COLUMNs = { "Incident Id", "Transporter Id", "Transporter Name", "Username","Issue Type" , "Incident Subject Line",
+				"Incident Created Timestamp", "Incident Resolved Timestamp",  "Incident Remark", "Support Remark" , "Is Closed" };
 		try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
 			Sheet sheet = workbook.createSheet("Incidents");
 
@@ -51,19 +51,22 @@ public class GenerateExcelReport {
 				row.createCell(2)
 						.setCellValue(incident.getTransporterName() == null ? " " : incident.getTransporterName());
 				row.createCell(3).setCellValue(incident.getUsername() == null ? " " : incident.getUsername());
-				row.createCell(4).setCellValue(incident.getEmail() == null ? " " : incident.getEmail());
-				row.createCell(5).setCellValue(incident.getContactNumber() == null ? " " : incident.getContactNumber());
-				row.createCell(6).setCellValue(incident.getLocation() == null ? " " : incident.getLocation());
-				row.createCell(7).setCellValue(
-						incident.getReportDateTime() == null ? " " : incident.getReportDateTime().toString());
-				row.createCell(8).setCellValue(incident.getIssueTypeStr() == null ? " " : incident.getIssueTypeStr());
-				row.createCell(9)
-						.setCellValue(incident.getIsClosed() == null ? " " : incident.getIsClosed().toString());
-				row.createCell(10)
-						.setCellValue(incident.getVehicleNumber() == null ? " " : incident.getVehicleNumber());
-				row.createCell(11).setCellValue(incident.getRemarks() == null ? " " : incident.getRemarks());
-				row.createCell(11).setCellValue(incident.getSupportRemark()== null ? " ":  incident.getSupportRemark());
+				row.createCell(4).setCellValue(incident.getIssueTypeStr() == null ? " " : incident.getIssueTypeStr());
+				row.createCell(5).setCellValue(incident.getSubjectLine() == null ? " " : incident.getSubjectLine());
 				
+				row.createCell(6).setCellValue(
+						incident.getReportDateTime() == null ? " " : incident.getReportDateTime().toString());
+				row.createCell(7).setCellValue(
+						incident.getResolvedDateTime() == null ? " " : incident.getResolvedDateTime().toString());
+
+				
+				row.createCell(8).setCellValue(incident.getRemarks() == null ? " " : incident.getRemarks());
+				row.createCell(9)
+						.setCellValue(incident.getSupportRemark() == null ? " " : incident.getSupportRemark());
+				row.createCell(10)
+				.setCellValue(incident.getIsClosed() == null ? " " : incident.getIsClosed().toString());
+
+
 			}
 
 			// Auto-size all the above columns

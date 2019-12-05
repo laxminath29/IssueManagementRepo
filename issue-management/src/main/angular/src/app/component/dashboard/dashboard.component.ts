@@ -71,6 +71,13 @@ export class DashboardComponent implements OnInit {
       this.spinner1 = false;
       this.selectedIncident.supportRemark = res.supportRemark;
       this.olderRemark = null;
+       this.dashboardApi.getDashboardData().subscribe((Incidences) => {
+      console.log(Incidences);
+
+      this.incidences = Incidences;
+      // console.log(this.diff_minutes(Incidences.reportDateTimeStr, this.dt2)); 
+      this.newarr = this.incidences;
+    });
     }, (error) => {
       setTimeout(() => {
         this.selectedIncident.supportRemark = null;
