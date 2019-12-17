@@ -66,7 +66,7 @@
               <th class="trans">Transporter Name</th>
               <th class="no-wrape text-center">Issue Type</th>
               <th class="subject"> Incident Subject Line</th>
-              <th class="created" (click)="sortData()">Date/Time Incident Created<i class="fa" [ngClass]="toggle?'fa-arrow-up':'fa-arrow-down'" aria-hidden="true"></i></th>
+              <th class="created" (click)="sortData()">Date/Time Incident Created<i class="fa" [ngClass]="(toggle || toggle===undefined)?'fa-arrow-down':'fa-arrow-up'" aria-hidden="true"></i></th>
               <th class="text-center">Date/Time Incident Resolved</th>
               <th class="text-center time">Time Taken to Resolve Incident</th>
               <th class="user-remark">Incident Remark</th>

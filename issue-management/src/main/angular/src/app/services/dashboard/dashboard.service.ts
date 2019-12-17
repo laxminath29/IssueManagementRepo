@@ -20,7 +20,7 @@ export class DashboardService {
   }
 
   RemarkPut(id,body:Dashboard){
-    return this.api.put(`incidents/v1/${id}`,body);
+    return this.api.put(`incidents/support/${id}`,body);
   }
 
   downloadCSV(){

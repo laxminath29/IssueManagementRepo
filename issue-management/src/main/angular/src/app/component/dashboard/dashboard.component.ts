@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit {
   token: string;
   selectedItem;
   firstName= 'Guybrush';
-   toggle=false;
+   toggle:boolean;
    olderRemark='';
 
   lastName= 'Threepwood';
@@ -33,10 +33,10 @@ export class DashboardComponent implements OnInit {
     this.token = `bearer ${this.auth.getToken()}`;
     console.log(this.token);
 
-    this.dashboardApi.getDashboardData().subscribe((Incidences) => {
-      console.log(Incidences);
-
-      this.incidences = Incidences;
+   this.dashboardApi.getDashboardData().subscribe((Incidences:any[]) => {   
+      this.incidences = Incidences.sort((a, b) => {    
+                  return <any>new Date(b.reportDateTimeStr) - <any>new Date(a.reportDateTimeStr);     
+                   });
       // console.log(this.diff_minutes(Incidences.reportDateTimeStr, this.dt2)); 
       this.newarr = this.incidences;
     });
